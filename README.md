@@ -1,27 +1,26 @@
 # AppBox Android
 
-AppBox es una tienda Android ligera con interfaz web publicada en GitHub Pages. La página carga desde internet, así que sus cambios pueden actualizarse sin reinstalar la APK de AppBox.
+AppBox es una tienda Android ligera. La app carga su página desde GitHub Pages, por lo que los cambios de la tienda no requieren reinstalar la APK. El código de la página se entrega al navegador y el repositorio de este proyecto es público; no guardes aquí claves ni material privado.
 
 ## Publicar apps desde la tienda
 
-La sección **Subir APK** usa un servicio privado en Cloudflare Workers. Para entrar se requiere el PIN configurado en el servidor. El servicio publica el archivo como una GitHub Release, actualiza `web/catalog.json`, y GitHub Pages despliega el nuevo catálogo. El token de GitHub y el PIN son secretos del Worker; nunca se incluyen en el HTML ni en la APK.
+La sección **Subir APK** llama a un Worker privado de Cloudflare. El PIN se valida en el servidor; después de validarlo, se guarda una sesión firmada en el navegador para que no lo solicite de nuevo en ese dispositivo/sesión. El Worker crea una GitHub Release, carga el APK y actualiza `web/catalog.json`; Pages publica el catálogo.
 
-1. Abre AppBox y toca **Subir APK**.
-2. Escribe el PIN y completa nombre, versión, categoría, descripción y archivo APK.
-3. Para actualizar una aplicación ya listada, usa el mismo nombre y aumenta la versión (por ejemplo `1.0.0` → `1.0.1`).
-4. Espera la confirmación. La publicación del catálogo puede tardar unos minutos.
+1. Abre AppBox, toca **Subir APK** e ingresa el PIN.
+2. Completa nombre, versión, categoría, descripción y selecciona el APK.
+3. Para actualizar una app existente, escribe el mismo nombre y una versión mayor (por ejemplo `1.0.0` a `1.0.1`).
+4. Espera la confirmación; el despliegue del catálogo puede tardar unos minutos.
 
-El APK debe ser válido, tener el mismo `applicationId` y estar firmado con la misma clave que la versión instalada para que Android lo acepte como actualización. Android siempre pedirá confirmar la instalación. El límite de carga es 94 MB por APK.
+Los APK se publican en Releases públicas. No se sube el código fuente del proyecto Android; solo se publica el archivo APK, que de todos modos puede analizarse o descompilarse. Android siempre pide confirmar la instalación. Para actualizar una app instalada, su APK debe tener el mismo `applicationId` y estar firmado con la misma clave. Límite de carga: 94 MB por archivo.
 
-## Infraestructura
+## Infraestructura y seguridad
 
-- GitHub Pages sirve la página pública y el catálogo JSON.
-- GitHub Releases aloja los APK públicos para descarga.
-- Cloudflare Worker valida el PIN y envía las publicaciones a GitHub con un token limitado al repositorio `blopex67-cloud/AppBox-Android`.
-- La tienda no puede instalar una app automáticamente ni enviar avisos cuando está cerrada.
-
-**Privacidad:** el PIN protege la acción de publicación, pero no hace privado el código cliente de la tienda ni oculta los APK publicados. La página servida por web y el repositorio público se pueden inspeccionar. No uses el PIN como una protección contra atacantes avanzados; si se filtra, cambia el secreto `APPBOX_PIN` en el Worker.
+- GitHub Pages sirve el catálogo y la tienda.
+- GitHub Releases aloja los APK descargables.
+- El Worker `appbox-uploader` valida el PIN y usa un token de GitHub restringido a este repositorio. Token y PIN son secretos de Cloudflare, no están en el HTML ni en la APK.
+- La contraseña corta puede compartirse o descubrirse; el PIN no oculta el código público ni convierte los APK públicos en privados. Cambia el secreto del Worker si se filtra.
+- AppBox no puede instalar actualizaciones en silencio ni enviar avisos mientras está cerrada.
 
 ## Compilar AppBox
 
-El workflow **Build AppBox APK** compila y publica la app Android. Los secretos de firma están en GitHub Actions; consérvalos para que futuras APK puedan instalarse como actualizaciones.
+El workflow **Build AppBox APK** compila la aplicación Android y publica una Release. Conserva los secretos persistentes de firma para que las nuevas versiones puedan instalarse encima de las anteriores.

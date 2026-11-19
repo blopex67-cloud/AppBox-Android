@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.webkit.DownloadListener
+import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -21,6 +22,18 @@ class MainActivity : Activity() {
     private lateinit var webView: WebView
     private var lastDownloadId: Long = -1L
     private var installAfterSettings: Uri? = null
+    private var fileChooserCallback: ValueCallback<Array<Uri>>? = null
+    private val fileChooserRequestCode = 3021
+
+    @Suppress("DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != fileChooserRequestCode) return
+        val callback = fileChooserCallback ?: return
+        fileChooserCallback = null
+        val uri = if (resultCode == RESULT_OK) data?.data else null
+        callback.onReceiveValue(if (uri != null) arrayOf(uri) else null)
+    }
 
     private val downloadReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -48,7 +61,39 @@ class MainActivity : Activity() {
         webView.settings.allowFileAccess = false
         webView.settings.allowContentAccess = false
         webView.webViewClient = WebViewClient()
-        webView.webChromeClient = WebChromeClient()
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onShowFileChooser(
+                webView: WebView?,
+                filePathCallback: ValueCallback<Array<Uri>>?,
+                fileChooserParams: FileChooserParams?
+            ): Boolean {
+                this@MainActivity.fileChooserCallback?.onReceiveValue(null)
+                this@MainActivity.fileChooserCallback = filePathCallback ?: return false
+                val intent = try {
+                    fileChooserParams?.createIntent()?.apply {
+                        type = "application/vnd.android.package-archive"
+                        putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/vnd.android.package-archive", "application/octet-stream"))
+                    } ?: Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "application/vnd.android.package-archive"
+                        putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/vnd.android.package-archive", "application/octet-stream"))
+                    }
+                } catch (_: Exception) {
+                    Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "*/*"
+                    }
+                }
+                return try {
+                    startActivityForResult(intent, fileChooserRequestCode)
+                    true
+                } catch (_: Exception) {
+                    this@MainActivity.fileChooserCallback?.onReceiveValue(null)
+                    this@MainActivity.fileChooserCallback = null
+                    false
+                }
+            }
+        }
         webView.setDownloadListener(DownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
             if (!url.lowercase().contains(".apk")) {
                 Toast.makeText(this, "Solo se descargan instaladores APK desde la tienda.", Toast.LENGTH_SHORT).show()
