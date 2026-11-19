@@ -100,6 +100,8 @@ class MainActivity : Activity() {
         webView = WebView(this)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
+        webView.settings.cacheMode = android.webkit.WebSettings.LOAD_NO_CACHE
+        webView.clearCache(true)
         webView.settings.allowFileAccess = false
         webView.settings.allowContentAccess = false
         val root = FrameLayout(this)
