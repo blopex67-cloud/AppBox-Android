@@ -34,16 +34,30 @@
   function render(){
     const term = query.value.trim().toLocaleLowerCase('es-MX');
     const found = apps.filter(a => (category === 'all' || (a.category || 'otras') === category) && (`${a.name} ${a.description} ${a.version}`.toLocaleLowerCase('es-MX').includes(term)));
-    if(!found.length){list.innerHTML = `<div class="empty"><strong>${apps.length ? 'No encontré esa app' : 'Todavía no hay apps publicadas'}</strong>${apps.length ? 'Prueba con otro nombre o categoría.' : 'Cuando publiques una app en el catálogo, aparecerá aquí con su versión y descarga.'}</div>`;return;}
-    list.innerHTML = found.map(a => `<article class="card"><div class="appicon" aria-hidden="true">${esc((a.iconText || a.name || 'A').trim().slice(0,1).toUpperCase())}</div><div class="body"><h3 class="title">${esc(a.name)}</h3><p class="meta">Versión ${esc(a.version || '—')} · ${esc(a.categoryLabel || 'Android')}</p><p class="desc">${esc(a.description || '')}</p><div class="actions"><a class="download" href="${esc(a.apkUrl || '#')}" ${a.apkUrl ? '' : 'aria-disabled="true"'}>Descargar</a>${a.releaseUrl ? `<a class="details" href="${esc(a.releaseUrl)}">Novedades ↗</a>` : ''}</div></div></article>`).join('');
+    if(!found.length){list.innerHTML = `<div class="empty"><strong>${apps.length ? 'No encontré esa app' : 'Todavía no hay apps publicadas'}</strong>${apps.length ? 'Prueba con otro nombre o categoría.' : 'Agrega una app al catálogo siguiendo las instrucciones del repositorio.'}</div>`;return;}
+    list.innerHTML = found.map(a => `<article class="card"><div class="appicon" aria-hidden="true">${esc((a.iconText || a.name || 'A').trim().slice(0,1).toUpperCase())}</div><div class="body"><h3 class="title">${esc(a.name)}</h3><p class="meta">Versión ${esc(a.version || '—')} · ${esc(a.categoryLabel || 'Android')}${a.releaseDate ? ` · ${esc(a.releaseDate)}` : ''}</p><p class="desc">${esc(a.description || '')}</p><div class="actions"><a class="download" href="${esc(a.apkUrl || '#')}" ${a.apkUrl ? '' : 'aria-disabled="true"'}>Descargar</a>${a.releaseUrl ? `<a class="details" href="${esc(a.releaseUrl)}">Novedades ↗</a>` : ''}</div></div></article>`).join('');
   }
-  async function load(){status.classList.remove('error');status.textContent='Buscando versiones…';document.querySelector('#refresh').disabled=true;
-    try{const r=await fetch(catalogUrl + '?t=' + Date.now(), {cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const data=await r.json();apps=Array.isArray(data.apps)?data.apps:[];render();status.textContent=`${apps.length} ${apps.length===1?'app':'apps'} · catálogo actualizado`;}
-    catch(e){status.classList.add('error');status.textContent='No pude cargar el catálogo';list.innerHTML='<div class="notice">Revisa tu conexión e inténtalo de nuevo.</div>';}
-    finally{document.querySelector('#refresh').disabled=false;}
+  async function resolveLatestRelease(app){
+    if(!app.githubRepo) return app;
+    const repo = String(app.githubRepo).trim().replace(/^https:\/\/github\.com\//,'').replace(/\.git$/,'');
+    if(!/^[\w.-]+\/[\w.-]+$/.test(repo)) return app;
+    try {
+      const response = await fetch(`https://api.github.com/repos/${repo}/releases/latest`, {cache:'no-store', headers:{Accept:'application/vnd.github+json'}});
+      if(!response.ok) return app;
+      const release = await response.json();
+      const apk = (release.assets || []).find(asset => asset.name.toLowerCase().endsWith('.apk'));
+      if(!apk) return app;
+      const tag = String(release.tag_name || '').replace(/^v/i,'');
+      return {...app, version:tag || app.version, apkUrl:apk.browser_download_url, releaseUrl:release.html_url, releaseDate:release.published_at ? new Date(release.published_at).toLocaleDateString('es-MX') : ''};
+    } catch (_) { return app; }
+  }
+  async function load(){status.classList.remove('error');status.textContent='Revisando versiones…';document.querySelector('#refresh').disabled=true;
+    try{const r=await fetch(catalogUrl + '?t=' + Date.now(), {cache:'no-store'});if(!r.ok)throw new Error('catalog');const data=await r.json();const listed=Array.isArray(data.apps)?data.apps:[];apps=await Promise.all(listed.map(resolveLatestRelease));render();status.textContent=`${apps.length} ${apps.length===1?'app':'apps'} · versiones revisadas`}
+    catch(_){status.classList.add('error');status.textContent='No pude cargar el catálogo';list.innerHTML='<div class="notice">Revisa tu conexión e inténtalo de nuevo.</div>'}
+    finally{document.querySelector('#refresh').disabled=false}
   }
   document.querySelector('#refresh').addEventListener('click',load); document.querySelector('#searchBtn').addEventListener('click',render); query.addEventListener('input',render);
-  document.querySelector('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;category=b.dataset.cat;document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x===b));render();});
+  document.querySelector('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;category=b.dataset.cat;document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x===b));render()});
   load();
 })();
 </script>

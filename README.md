@@ -1,11 +1,10 @@
 # AppBox Android
 
-AppBox es una tienda pequeña para Android: interfaz en HTML, empaquetada en una app WebView. El catálogo es un JSON estático servido por GitHub Pages; las versiones y los APK se descargan de GitHub Releases. No hay un servidor encendido ni una base de datos que mantener.
+AppBox es una tienda sencilla para Android: interfaz HTML empaquetada en una app WebView, alojada en GitHub Pages. Los APK viven en GitHub Releases; no hay un servidor encendido que mantener.
 
-## Publicar una app o una actualización
+## Agregar una app (solo una vez)
 
-1. En el repositorio de la app, crea una **Release** nueva desde GitHub y adjunta el APK. No reemplaces el archivo con otro nombre: usa el mismo nombre de APK por cada release, por ejemplo `MiJuego.apk`.
-2. Abre `web/catalog.json` en este repositorio y añade o cambia una entrada dentro de `apps`. Ejemplo:
+1. Abre `web/catalog.json` y agrega un objeto dentro de `apps`:
 
 ```json
 {
@@ -14,27 +13,24 @@ AppBox es una tienda pequeña para Android: interfaz en HTML, empaquetada en una
   "iconText": "M",
   "category": "juegos",
   "categoryLabel": "Juego Android",
-  "version": "1.2.0",
-  "description": "Descripción breve de la app.",
-  "packageName": "com.ejemplo.mijuego",
-  "apkUrl": "https://github.com/USUARIO/REPO/releases/latest/download/MiJuego.apk",
-  "releaseUrl": "https://github.com/USUARIO/REPO/releases/latest"
+  "version": "1.0.0",
+  "description": "Descripción breve.",
+  "githubRepo": "USUARIO/REPO"
 }
 ```
 
-3. Guarda el cambio. Pages publica el catálogo y AppBox lo consulta al abrirse o al tocar **Actualizar**. La actualización se ve cuando termina el despliegue de Pages (normalmente unos minutos).
+2. Publica el cambio. AppBox consultará las GitHub Releases más recientes de cada `githubRepo` cada vez que alguien abra o actualice la tienda. La página se actualiza sola; no hay que editar el catálogo al publicar versiones posteriores.
+3. Para cada nueva versión, crea una Release pública en ese repositorio, agrega el APK y usa un tag de versión como `v1.1.0`. AppBox mostrará el tag, el APK y las novedades de esa Release.
 
-Las Releases, los APK y el catálogo de este repositorio son públicos. No publiques aquí aplicaciones privadas o archivos con información sensible. Para instalar una actualización, el APK nuevo debe conservar el mismo `applicationId` y estar firmado con la misma clave que la versión instalada; Android siempre muestra su confirmación de instalación.
+AppBox toma el primer archivo `.apk` de la Release más reciente. Conserva el mismo nombre de archivo APK entre versiones para que el navegador de la tienda lo pueda descargar sin problemas.
 
-## App Android
+## Límites importantes
 
-El workflow **Build AppBox APK** compila el APK. Se inicia desde Actions → Build AppBox APK → Run workflow e indica `version_name` y `version_code`. El APK resultante se publica como Release del propio AppBox.
+- La tienda consulta Releases públicas y necesita conexión a internet. Para comprobar una versión nueva, la persona abre AppBox y toca **Actualizar**; Android no permite que una tienda propia instale APKs silenciosamente.
+- El APK nuevo de cada app debe conservar el mismo `applicationId` y estar firmado con la misma clave de la versión anterior; Android solicitará confirmar la instalación.
+- Este repositorio y los APK publicados en Releases son públicos. No subas apps privadas ni datos sensibles.
+- No hay carga de APK desde un botón público de la tienda: la publicación se hace en GitHub, evitando guardar un token de cuenta dentro de AppBox.
 
-La firma de AppBox se guarda en GitHub Actions Secrets y no en el código. La primera compilación requiere estos secretos: `APPBOX_KEYSTORE_B64`, `APPBOX_KEYSTORE_PASSWORD`, `APPBOX_KEY_ALIAS` y `APPBOX_KEY_PASSWORD`. No borres ni reemplaces esa clave: sin ella, Android no aceptará instalar versiones nuevas encima de AppBox.
+## Compilar AppBox
 
-## Catálogo y límites
-
-- `web/catalog.json` es la lista que muestra la tienda; el catálogo inicia vacío hasta que agregues tus apps.
-- El botón de descarga inicia la descarga del APK y abre el instalador de Android. Si Android lo pide, autoriza a AppBox como origen de instalación.
-- GitHub Pages + Releases son el alojamiento sencillo. No ofrecen una carga APK anónima desde la interfaz pública de la tienda; la publicación se hace desde GitHub para proteger tu cuenta y evitar dejar un token secreto dentro de la app.
-- No se instala nada en silencio ni se salta la firma/confirmación de Android.
+El workflow **Build AppBox APK** compila y publica la tienda como Release. Los secretos de firma están configurados en GitHub Actions; consérvalos para que futuras versiones de AppBox puedan instalarse sobre la anterior.

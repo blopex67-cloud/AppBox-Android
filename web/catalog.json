@@ -1,5 +1,18 @@
 {
   "schema": 1,
   "updatedAt": "2026-11-19T00:00:00-06:00",
-  "apps": []
+  "apps": [
+    {
+      "id": "appbox",
+      "name": "AppBox",
+      "iconText": "A",
+      "category": "herramientas",
+      "categoryLabel": "Tienda de apps",
+      "version": "1.0.0",
+      "description": "Tienda Android ligera. Consulta publicaciones de GitHub Releases.",
+      "githubRepo": "blopex67-cloud/AppBox-Android",
+      "apkUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/latest/download/AppBox-v1.0.0.apk",
+      "releaseUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/latest"
+    }
+  ]
 }
