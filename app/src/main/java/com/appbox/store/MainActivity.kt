@@ -52,8 +52,8 @@ class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.statusBarColor = android.graphics.Color.rgb(16, 19, 27)
-        window.navigationBarColor = android.graphics.Color.rgb(16, 19, 27)
+        window.statusBarColor = android.graphics.Color.rgb(18, 18, 18)
+        window.navigationBarColor = android.graphics.Color.rgb(18, 18, 18)
         registerDownloadReceiver()
         webView = WebView(this)
         webView.settings.javaScriptEnabled = true
