@@ -1,0 +1,58 @@
+name: Build AppBox APK
+on:
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: App version, e.g. 1.0.0
+        required: true
+        type: string
+        default: "1.0.0"
+      version_code:
+        description: Android version code (must increase every release)
+        required: true
+        type: string
+        default: "1"
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Decode persistent app signing key
+        env:
+          APPBOX_KEYSTORE_B64: ${{ secrets.APPBOX_KEYSTORE_B64 }}
+          APPBOX_KEYSTORE_PASSWORD: ${{ secrets.APPBOX_KEYSTORE_PASSWORD }}
+          APPBOX_KEY_ALIAS: ${{ secrets.APPBOX_KEY_ALIAS }}
+          APPBOX_KEY_PASSWORD: ${{ secrets.APPBOX_KEY_PASSWORD }}
+        run: |
+          test -n "$APPBOX_KEYSTORE_B64" || { echo "Missing signing-key repository secrets"; exit 1; }
+          echo "$APPBOX_KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/appbox-signing.p12"
+          echo "APPBOX_KEYSTORE_PATH=$RUNNER_TEMP/appbox-signing.p12" >> "$GITHUB_ENV"
+          echo "APPBOX_KEYSTORE_PASSWORD=$APPBOX_KEYSTORE_PASSWORD" >> "$GITHUB_ENV"
+          echo "APPBOX_KEY_ALIAS=$APPBOX_KEY_ALIAS" >> "$GITHUB_ENV"
+          echo "APPBOX_KEY_PASSWORD=$APPBOX_KEY_PASSWORD" >> "$GITHUB_ENV"
+      - name: Build signed release APK
+        env:
+          VERSION_NAME: ${{ inputs.version_name }}
+          VERSION_CODE: ${{ inputs.version_code }}
+        run: |
+          gradle --no-daemon :app:assembleRelease -PversionName="$VERSION_NAME" -PversionCode="$VERSION_CODE"
+          mkdir -p output
+          cp app/build/outputs/apk/release/app-release.apk "output/AppBox-v${VERSION_NAME}.apk"
+      - name: Publish APK as a GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: appbox-v${{ inputs.version_name }}
+          name: AppBox v${{ inputs.version_name }}
+          target_commitish: ${{ github.sha }}
+          generate_release_notes: true
+          files: output/AppBox-v${{ inputs.version_name }}.apk
