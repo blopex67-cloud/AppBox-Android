@@ -10,24 +10,46 @@
     :root{color-scheme:dark;--bg:#10131b;--panel:#191e29;--panel2:#222938;--ink:#f5f7fb;--muted:#a6afc0;--line:#30394a;--accent:#8b7cff;--green:#b6f36b}
     *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% -20%,#292d52 0,transparent 42%),var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
     .wrap{max-width:920px;margin:auto;padding:env(safe-area-inset-top) 18px calc(34px + env(safe-area-inset-bottom))}
-    header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 14px}.brand{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:800;letter-spacing:-.4px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#aaa0ff,#6960eb);display:grid;place-items:center;color:#151528;font-size:21px;box-shadow:0 8px 24px #685cff40}.small{font-size:12px;color:var(--muted)}button{font:inherit;color:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel2);border-radius:12px;padding:9px 12px}.hero{padding:24px 0 20px}.hero h1{font-size:clamp(26px,7vw,38px);line-height:1.12;letter-spacing:-1px;margin:0 0 8px}.hero p{color:var(--muted);margin:0;max-width:540px}.search{display:flex;gap:10px;margin:18px 0 16px}.search input{min-width:0;flex:1;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:14px 15px;font:inherit;outline:none}.search input:focus{border-color:var(--accent)}.chips{display:flex;gap:8px;overflow:auto;padding:1px 0 6px}.chip{white-space:nowrap;border-radius:999px;padding:8px 13px;font-size:13px;color:var(--muted)}.chip.active{background:#8b7cff26;border-color:#8b7cff;color:#d6d1ff}.section{display:flex;align-items:center;justify-content:space-between;margin:20px 0 12px}.section h2{font-size:18px;margin:0}.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px}.card{display:flex;gap:14px;padding:15px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(150deg,#1d2330,#171b25);min-height:148px}.appicon{flex:none;width:58px;height:58px;border-radius:17px;background:linear-gradient(145deg,#94f2c2,#57bba4);display:grid;place-items:center;color:#10231f;font-size:27px;font-weight:900}.body{min-width:0;flex:1}.title{margin:0;font-weight:750;font-size:16px}.meta{margin:3px 0 8px;color:var(--muted);font-size:12px}.desc{color:#d2d7e1;font-size:13px;margin:0 0 13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.actions{display:flex;align-items:center;gap:8px}.download{background:var(--green);color:#17210f;border:0;font-weight:800;padding:9px 15px;border-radius:999px;text-decoration:none;font-size:13px}.details{border:0;background:transparent;color:#bdc5d4;font-size:12px;padding:7px}.empty,.notice{border:1px dashed var(--line);border-radius:18px;padding:22px;color:var(--muted);text-align:center;background:#161a24}.empty strong{color:var(--ink);display:block;margin-bottom:6px}.foot{color:#7f899b;font-size:11px;text-align:center;margin-top:28px}.status{font-size:12px;color:var(--muted)}.status.error{color:#ffb7b7}
+    header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 14px}.brand{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:800;letter-spacing:-.4px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#aaa0ff,#6960eb);display:grid;place-items:center;color:#151528;font-size:21px;box-shadow:0 8px 24px #685cff40}.small{font-size:12px;color:var(--muted)}button{font:inherit;color:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel2);border-radius:12px;padding:9px 12px}.hero{padding:24px 0 20px}.adminbtn{font-size:12px;border-radius:999px;padding:9px 13px;color:#d6d1ff;border-color:#6259b8;background:#26243b}.modal{position:fixed;inset:0;background:#080a10d9;z-index:20;display:none;align-items:center;justify-content:center;padding:16px}.modal.open{display:flex}.modalbox{width:min(100%,480px);max-height:90vh;overflow:auto;border:1px solid var(--line);border-radius:20px;background:#191e29;padding:20px;box-shadow:0 24px 80px #0009}.modalhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.modalhead h2{font-size:20px;margin:0}.close{font-size:20px;padding:4px 10px}.formgrid{display:grid;gap:11px;margin-top:16px}.formgrid label{display:grid;gap:5px;font-size:13px;color:#d2d7e1}.formgrid input,.formgrid select,.formgrid textarea{width:100%;border:1px solid var(--line);border-radius:11px;background:#10131b;color:var(--ink);padding:11px;font:inherit}.formgrid textarea{min-height:72px;resize:vertical}.formgrid input[type=file]{font-size:12px}.primary{background:var(--green);color:#17210f;border:0;font-weight:800;border-radius:999px;padding:11px 16px}.formrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}.modalnote{color:var(--muted);font-size:12px;margin:8px 0}.formstatus{font-size:13px;color:var(--muted);min-height:20px}.formstatus.error{color:#ffb7b7}.formstatus.ok{color:#b6f36b}body.modalopen{overflow:hidden}.hero h1{font-size:clamp(26px,7vw,38px);line-height:1.12;letter-spacing:-1px;margin:0 0 8px}.hero p{color:var(--muted);margin:0;max-width:540px}.search{display:flex;gap:10px;margin:18px 0 16px}.search input{min-width:0;flex:1;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:14px 15px;font:inherit;outline:none}.search input:focus{border-color:var(--accent)}.chips{display:flex;gap:8px;overflow:auto;padding:1px 0 6px}.chip{white-space:nowrap;border-radius:999px;padding:8px 13px;font-size:13px;color:var(--muted)}.chip.active{background:#8b7cff26;border-color:#8b7cff;color:#d6d1ff}.section{display:flex;align-items:center;justify-content:space-between;margin:20px 0 12px}.section h2{font-size:18px;margin:0}.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px}.card{display:flex;gap:14px;padding:15px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(150deg,#1d2330,#171b25);min-height:148px}.appicon{flex:none;width:58px;height:58px;border-radius:17px;background:linear-gradient(145deg,#94f2c2,#57bba4);display:grid;place-items:center;color:#10231f;font-size:27px;font-weight:900}.body{min-width:0;flex:1}.title{margin:0;font-weight:750;font-size:16px}.meta{margin:3px 0 8px;color:var(--muted);font-size:12px}.desc{color:#d2d7e1;font-size:13px;margin:0 0 13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.actions{display:flex;align-items:center;gap:8px}.download{background:var(--green);color:#17210f;border:0;font-weight:800;padding:9px 15px;border-radius:999px;text-decoration:none;font-size:13px}.details{border:0;background:transparent;color:#bdc5d4;font-size:12px;padding:7px}.empty,.notice{border:1px dashed var(--line);border-radius:18px;padding:22px;color:var(--muted);text-align:center;background:#161a24}.empty strong{color:var(--ink);display:block;margin-bottom:6px}.foot{color:#7f899b;font-size:11px;text-align:center;margin-top:28px}.status{font-size:12px;color:var(--muted)}.status.error{color:#ffb7b7}
     @media(max-width:440px){.wrap{padding-left:14px;padding-right:14px}.card{padding:13px;gap:11px}.appicon{width:52px;height:52px}.brand{font-size:17px}}
   </style>
 </head>
 <body>
   <main class="wrap">
-    <header><div class="brand"><div class="logo" aria-hidden="true">A</div><span>AppBox</span></div><button id="refresh" type="button" aria-label="Actualizar catálogo">↻ <span class="small">Actualizar</span></button></header>
+    <header><div class="brand"><div class="logo" aria-hidden="true">A</div><span>AppBox</span></div><div style="display:flex;gap:8px;align-items:center"><button id="adminOpen" class="adminbtn" type="button">Subir APK</button><button id="refresh" type="button" aria-label="Actualizar catálogo">↻ <span class="small">Actualizar</span></button></div></header>
     <section class="hero"><h1>Tus apps,<br>en un solo lugar.</h1><p>Descubre lo que hay y revisa las versiones nuevas cuando se publiquen.</p></section>
     <label class="search"><input id="search" type="search" placeholder="Buscar aplicaciones" autocomplete="off"><button id="searchBtn" type="button">⌕</button></label>
     <nav class="chips" id="filters" aria-label="Categorías"><button class="chip active" data-cat="all">Todas</button><button class="chip" data-cat="juegos">Juegos</button><button class="chip" data-cat="herramientas">Herramientas</button><button class="chip" data-cat="otras">Otras</button></nav>
     <div class="section"><h2>Aplicaciones</h2><span id="status" class="status">Conectando…</span></div>
     <section id="apps" class="list" aria-live="polite"></section>
-    <p class="foot">Las apps y actualizaciones se descargan desde GitHub. Android te pedirá confirmar la instalación.</p>
+    <p class="foot">Descarga la versión que quieras; Android te pedirá confirmar la instalación.</p>
   </main>
+  <div class="modal" id="adminModal" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+    <section class="modalbox"><div class="modalhead"><h2 id="adminTitle">Publicar aplicación</h2><button class="close" id="adminClose" type="button" aria-label="Cerrar">×</button></div>
+      <p class="modalnote">Ingresa el PIN para habilitar la publicación. El APK se sube a GitHub y aparece en la tienda al terminar la publicación.</p>
+      <form id="publishForm" class="formgrid">
+        <label>PIN<input id="pinInput" type="password" inputmode="numeric" autocomplete="current-password" required maxlength="20" placeholder="PIN de administrador"></label>
+        <button class="primary" id="authButton" type="button">Continuar</button>
+        <div id="publishFields" hidden>
+          <div class="formrow"><label>Nombre de la app<input id="appName" required maxlength="80" placeholder="Mi juego"></label><label>Versión<input id="appVersion" required maxlength="40" placeholder="1.0.0" pattern="[0-9]+\.[0-9]+(\.[0-9]+)?([+-][A-Za-z0-9.-]+)?"></label></div>
+          <div class="formrow"><label>Categoría<select id="appCategory"><option value="juegos">Juegos</option><option value="herramientas">Herramientas</option><option value="otras">Otras</option></select></label><label>Icono (letra)<input id="appIcon" maxlength="8" placeholder="A"></label></div>
+          <label>Descripción<textarea id="appDescription" maxlength="240" placeholder="Descripción breve"></textarea></label>
+          <label>Archivo APK<input id="apkFile" type="file" accept=".apk,application/vnd.android.package-archive" required></label>
+          <p class="modalnote">Límite del servidor: 94 MB por APK. Para actualizar una app, usa el mismo nombre y una versión nueva. Android pedirá confirmar la instalación.</p>
+          <button class="primary" id="uploadButton" type="submit">Publicar APK</button>
+        </div>
+        <div class="formstatus" id="publishStatus" aria-live="polite"></div>
+      </form>
+    </section>
+  </div>
 <script>
 (() => {
   const catalogUrl = new URL('catalog.json', location.href).href;
+  const uploaderUrl = 'https://appbox-uploader.appbox-blopex67.workers.dev';
   const list = document.querySelector('#apps'), status = document.querySelector('#status');
+  const adminModal = document.querySelector('#adminModal'), pinInput = document.querySelector('#pinInput');
+  const publishStatus = document.querySelector('#publishStatus'), publishFields = document.querySelector('#publishFields');
+  let uploadToken = localStorage.getItem('appboxUploadToken') || '';
   const query = document.querySelector('#search');
   let apps = [], category = 'all';
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -47,7 +69,7 @@
       const release = await response.json();
       const apk = (release.assets || []).find(asset => asset.name.toLowerCase().endsWith('.apk'));
       if(!apk) return app;
-      const tag = String(release.tag_name || '').replace(/^.*-v(?=\\d)/i,'').replace(/^v/i,'');
+      const tag = String(release.tag_name || '').replace(/^.*-v(?=\d)/i,'').replace(/^v/i,'');
       return {...app, version:tag || app.version, apkUrl:apk.browser_download_url, releaseUrl:release.html_url, releaseDate:release.published_at ? new Date(release.published_at).toLocaleDateString('es-MX') : ''};
     } catch (_) { return app; }
   }
@@ -56,6 +78,38 @@
     catch(_){status.classList.add('error');status.textContent='No pude cargar el catálogo';list.innerHTML='<div class="notice">Revisa tu conexión e inténtalo de nuevo.</div>'}
     finally{document.querySelector('#refresh').disabled=false}
   }
+  function setPublishStatus(text, kind=''){publishStatus.textContent=text;publishStatus.className='formstatus'+(kind?' '+kind:'')}
+  function openAdmin(){adminModal.classList.add('open');document.body.classList.add('modalopen');setPublishStatus('');if(uploadToken){publishFields.hidden=false;pinInput.disabled=true;document.querySelector('#authButton').hidden=true;setPublishStatus('Acceso guardado en este dispositivo.','ok')}else{publishFields.hidden=true;pinInput.disabled=false;document.querySelector('#authButton').hidden=false;pinInput.value='';pinInput.focus()}}
+  function closeAdmin(){adminModal.classList.remove('open');document.body.classList.remove('modalopen')}
+  document.querySelector('#adminOpen').addEventListener('click',openAdmin);
+  document.querySelector('#adminClose').addEventListener('click',closeAdmin);
+  adminModal.addEventListener('click',e=>{if(e.target===adminModal)closeAdmin()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&adminModal.classList.contains('open'))closeAdmin()});
+  document.querySelector('#authButton').addEventListener('click',async()=>{
+    const pin=pinInput.value.trim();if(!pin){setPublishStatus('Escribe el PIN.','error');pinInput.focus();return}
+    const button=document.querySelector('#authButton');button.disabled=true;setPublishStatus('Verificando…');
+    try{const r=await fetch(uploaderUrl+'/auth',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({pin})});const data=await r.json();if(!r.ok)throw new Error(data.error||'No se pudo verificar el PIN.');uploadToken=data.token;localStorage.setItem('appboxUploadToken',uploadToken);publishFields.hidden=false;pinInput.disabled=true;button.hidden=true;setPublishStatus('Acceso autorizado para esta sesión.','ok')}
+    catch(e){setPublishStatus(e.message||'No se pudo conectar con el servicio.','error')}
+    finally{button.disabled=false}
+  });
+  document.querySelector('#publishForm').addEventListener('submit',async e=>{
+    e.preventDefault();if(!uploadToken){setPublishStatus('Primero valida el PIN.','error');return}
+    const file=document.querySelector('#apkFile').files[0];if(!file){setPublishStatus('Selecciona un APK.','error');return}
+    if(!file.name.toLowerCase().endsWith('.apk')){setPublishStatus('El archivo debe terminar en .apk.','error');return}
+    if(file.size>94*1024*1024){setPublishStatus('El APK supera el límite de 94 MB.','error');return}
+    const name=document.querySelector('#appName').value.trim(),version=document.querySelector('#appVersion').value.trim();
+    if(!/^\d+\.\d+(?:\.\d+)?(?:[-+][0-9A-Za-z.-]+)?$/.test(version)){setPublishStatus('Usa una versión como 1.2.0.','error');return}
+    const button=document.querySelector('#uploadButton');button.disabled=true;setPublishStatus('Subiendo APK y publicando Release… no cierres esta ventana.');
+    try{
+      const headers={'authorization':'Bearer '+uploadToken,'content-type':'application/vnd.android.package-archive','x-app-name':name,'x-app-version':version,'x-app-category':document.querySelector('#appCategory').value,'x-app-description':document.querySelector('#appDescription').value,'x-app-icon':document.querySelector('#appIcon').value||name.slice(0,1).toUpperCase(),'x-apk-filename':file.name};
+      const r=await fetch(uploaderUrl+'/upload',{method:'POST',headers,body:file});const data=await r.json();
+      if(r.status===401){uploadToken='';localStorage.removeItem('appboxUploadToken');publishFields.hidden=true;pinInput.disabled=false;document.querySelector('#authButton').hidden=false;throw new Error(data.error||'La sesión venció. Vuelve a ingresar el PIN.')}
+      if(!r.ok&&r.status!==207)throw new Error(data.error||'No se pudo publicar el APK.');
+      if(data.warning){setPublishStatus(data.warning,'error');return}
+      setPublishStatus(data.message||'APK publicado correctamente.','ok');document.querySelector('#apkFile').value='';load()
+    }catch(e){setPublishStatus(e.message||'Error de conexión al publicar.','error')}
+    finally{button.disabled=false}
+  });
   document.querySelector('#refresh').addEventListener('click',load); document.querySelector('#searchBtn').addEventListener('click',render); query.addEventListener('input',render);
   document.querySelector('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;category=b.dataset.cat;document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x===b));render()});
   load();
