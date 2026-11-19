@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updatedAt": "2026-11-19T00:00:00-06:00",
+  "updatedAt": "2026-11-19T15:11:00-06:00",
   "apps": [
     {
       "id": "appbox",
@@ -8,10 +8,11 @@
       "iconText": "A",
       "category": "herramientas",
       "categoryLabel": "Tienda de apps",
-      "version": "1.0.0",
-      "description": "Tienda Android ligera para descubrir y descargar tus apps.",
-      "apkUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/download/appbox-v1.0.0/AppBox-v1.0.0.apk",
-      "releaseUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/tag/appbox-v1.0.0"
+      "version": "1.0.1",
+      "description": "Tienda Android ligera con publicación protegida de APKs.",
+      "apkUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/latest/download/AppBox-v1.0.1.apk",
+      "releaseUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/latest",
+      "githubRepo": "blopex67-cloud/AppBox-Android"
     }
   ]
 }
