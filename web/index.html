@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#10131b">
+  <meta name="description" content="Tienda sencilla para descubrir y actualizar aplicaciones Android.">
+  <title>AppBox — tus apps</title>
+  <style>
+    :root{color-scheme:dark;--bg:#10131b;--panel:#191e29;--panel2:#222938;--ink:#f5f7fb;--muted:#a6afc0;--line:#30394a;--accent:#8b7cff;--green:#b6f36b}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% -20%,#292d52 0,transparent 42%),var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+    .wrap{max-width:920px;margin:auto;padding:env(safe-area-inset-top) 18px calc(34px + env(safe-area-inset-bottom))}
+    header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 14px}.brand{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:800;letter-spacing:-.4px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#aaa0ff,#6960eb);display:grid;place-items:center;color:#151528;font-size:21px;box-shadow:0 8px 24px #685cff40}.small{font-size:12px;color:var(--muted)}button{font:inherit;color:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel2);border-radius:12px;padding:9px 12px}.hero{padding:24px 0 20px}.hero h1{font-size:clamp(26px,7vw,38px);line-height:1.12;letter-spacing:-1px;margin:0 0 8px}.hero p{color:var(--muted);margin:0;max-width:540px}.search{display:flex;gap:10px;margin:18px 0 16px}.search input{min-width:0;flex:1;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:14px 15px;font:inherit;outline:none}.search input:focus{border-color:var(--accent)}.chips{display:flex;gap:8px;overflow:auto;padding:1px 0 6px}.chip{white-space:nowrap;border-radius:999px;padding:8px 13px;font-size:13px;color:var(--muted)}.chip.active{background:#8b7cff26;border-color:#8b7cff;color:#d6d1ff}.section{display:flex;align-items:center;justify-content:space-between;margin:20px 0 12px}.section h2{font-size:18px;margin:0}.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px}.card{display:flex;gap:14px;padding:15px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(150deg,#1d2330,#171b25);min-height:148px}.appicon{flex:none;width:58px;height:58px;border-radius:17px;background:linear-gradient(145deg,#94f2c2,#57bba4);display:grid;place-items:center;color:#10231f;font-size:27px;font-weight:900}.body{min-width:0;flex:1}.title{margin:0;font-weight:750;font-size:16px}.meta{margin:3px 0 8px;color:var(--muted);font-size:12px}.desc{color:#d2d7e1;font-size:13px;margin:0 0 13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.actions{display:flex;align-items:center;gap:8px}.download{background:var(--green);color:#17210f;border:0;font-weight:800;padding:9px 15px;border-radius:999px;text-decoration:none;font-size:13px}.details{border:0;background:transparent;color:#bdc5d4;font-size:12px;padding:7px}.empty,.notice{border:1px dashed var(--line);border-radius:18px;padding:22px;color:var(--muted);text-align:center;background:#161a24}.empty strong{color:var(--ink);display:block;margin-bottom:6px}.foot{color:#7f899b;font-size:11px;text-align:center;margin-top:28px}.status{font-size:12px;color:var(--muted)}.status.error{color:#ffb7b7}
+    @media(max-width:440px){.wrap{padding-left:14px;padding-right:14px}.card{padding:13px;gap:11px}.appicon{width:52px;height:52px}.brand{font-size:17px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header><div class="brand"><div class="logo" aria-hidden="true">A</div><span>AppBox</span></div><button id="refresh" type="button" aria-label="Actualizar catálogo">↻ <span class="small">Actualizar</span></button></header>
+    <section class="hero"><h1>Tus apps,<br>en un solo lugar.</h1><p>Descubre lo que hay y revisa las versiones nuevas cuando se publiquen.</p></section>
+    <label class="search"><input id="search" type="search" placeholder="Buscar aplicaciones" autocomplete="off"><button id="searchBtn" type="button">⌕</button></label>
+    <nav class="chips" id="filters" aria-label="Categorías"><button class="chip active" data-cat="all">Todas</button><button class="chip" data-cat="juegos">Juegos</button><button class="chip" data-cat="herramientas">Herramientas</button><button class="chip" data-cat="otras">Otras</button></nav>
+    <div class="section"><h2>Aplicaciones</h2><span id="status" class="status">Conectando…</span></div>
+    <section id="apps" class="list" aria-live="polite"></section>
+    <p class="foot">Las apps y actualizaciones se descargan desde GitHub. Android te pedirá confirmar la instalación.</p>
+  </main>
+<script>
+(() => {
+  const catalogUrl = new URL('catalog.json', location.href).href;
+  const list = document.querySelector('#apps'), status = document.querySelector('#status');
+  const query = document.querySelector('#search');
+  let apps = [], category = 'all';
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function render(){
+    const term = query.value.trim().toLocaleLowerCase('es-MX');
+    const found = apps.filter(a => (category === 'all' || (a.category || 'otras') === category) && (`${a.name} ${a.description} ${a.version}`.toLocaleLowerCase('es-MX').includes(term)));
+    if(!found.length){list.innerHTML = `<div class="empty"><strong>${apps.length ? 'No encontré esa app' : 'Todavía no hay apps publicadas'}</strong>${apps.length ? 'Prueba con otro nombre o categoría.' : 'Cuando publiques una app en el catálogo, aparecerá aquí con su versión y descarga.'}</div>`;return;}
+    list.innerHTML = found.map(a => `<article class="card"><div class="appicon" aria-hidden="true">${esc((a.iconText || a.name || 'A').trim().slice(0,1).toUpperCase())}</div><div class="body"><h3 class="title">${esc(a.name)}</h3><p class="meta">Versión ${esc(a.version || '—')} · ${esc(a.categoryLabel || 'Android')}</p><p class="desc">${esc(a.description || '')}</p><div class="actions"><a class="download" href="${esc(a.apkUrl || '#')}" ${a.apkUrl ? '' : 'aria-disabled="true"'}>Descargar</a>${a.releaseUrl ? `<a class="details" href="${esc(a.releaseUrl)}">Novedades ↗</a>` : ''}</div></div></article>`).join('');
+  }
+  async function load(){status.classList.remove('error');status.textContent='Buscando versiones…';document.querySelector('#refresh').disabled=true;
+    try{const r=await fetch(catalogUrl + '?t=' + Date.now(), {cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const data=await r.json();apps=Array.isArray(data.apps)?data.apps:[];render();status.textContent=`${apps.length} ${apps.length===1?'app':'apps'} · catálogo actualizado`;}
+    catch(e){status.classList.add('error');status.textContent='No pude cargar el catálogo';list.innerHTML='<div class="notice">Revisa tu conexión e inténtalo de nuevo.</div>';}
+    finally{document.querySelector('#refresh').disabled=false;}
+  }
+  document.querySelector('#refresh').addEventListener('click',load); document.querySelector('#searchBtn').addEventListener('click',render); query.addEventListener('input',render);
+  document.querySelector('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;category=b.dataset.cat;document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x===b));render();});
+  load();
+})();
+</script>
+</body>
+</html>
