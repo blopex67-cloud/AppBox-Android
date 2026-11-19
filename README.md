@@ -7,7 +7,7 @@ AppBox es una tienda Android ligera. La app carga su página desde GitHub Pages,
 La sección **Subir APK** llama a un Worker privado de Cloudflare. El PIN se valida en el servidor; después de validarlo, se guarda una sesión firmada en el navegador para que no lo solicite de nuevo en ese dispositivo/sesión. El Worker crea una GitHub Release, carga el APK y actualiza `web/catalog.json`; Pages publica el catálogo.
 
 1. Abre AppBox, toca **Subir APK** e ingresa el PIN.
-2. Completa nombre, versión, categoría, descripción y selecciona el APK.
+2. Completa nombre, versión, categoría, descripción, selecciona el APK y, si quieres, añade icono, hasta 5 capturas y un video MP4/WebM para la ficha.
 3. Para actualizar una app existente, escribe el mismo nombre y una versión mayor (por ejemplo `1.0.0` a `1.0.1`).
 4. Espera la confirmación; el despliegue del catálogo puede tardar unos minutos.
 
