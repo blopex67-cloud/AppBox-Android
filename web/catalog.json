@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updatedAt": "2026-11-19T22:34:46.175Z",
+  "updatedAt": "2026-11-19T22:44:33.563Z",
   "apps": [
     {
       "id": "volumi3d",
@@ -9,12 +9,12 @@
       "developer": "VOLUMI3D STUDIO",
       "category": "herramientas",
       "categoryLabel": "Herramienta Android",
-      "version": "1.0.0",
-      "description": "",
-      "changelog": "",
-      "apkUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/download/volumi3d-v1.0.0/AppBox-v1.apk",
-      "releaseUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/tag/volumi3d-v1.0.0",
-      "apkSize": 704972,
+      "version": "1.0.1",
+      "description": "Editor 3D móvil para crear y editar escenas y modelos 3D en Android.",
+      "changelog": "Publicación del APK de Volumi3D con herramientas para editar escenas e importar modelos 3D.",
+      "apkUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/download/volumi3d-v1.0.1/Volumi3D-1.0.1.apk",
+      "releaseUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/tag/volumi3d-v1.0.1",
+      "apkSize": 5527443,
       "releaseDate": "19/11/2026"
     }
   ]
