@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updatedAt": "2026-11-20T03:51:29.802Z",
+  "updatedAt": "2026-11-20T05:33:58.482Z",
   "apps": [
     {
       "id": "volumi3d",
@@ -23,6 +23,21 @@
         "https://github.com/blopex67-cloud/AppBox-Android/releases/download/volumi3d-v1.0.0/screenshot-3.jpg",
         "https://github.com/blopex67-cloud/AppBox-Android/releases/download/volumi3d-v1.0.0/screenshot-4.png"
       ]
+    },
+    {
+      "id": "five-night-at-amyr-oh-algo-asi-xd",
+      "name": "Five night at amyr oh algo así XD",
+      "iconText": "F",
+      "developer": "Amyr animations",
+      "category": "juegos",
+      "categoryLabel": "Juego Android",
+      "version": "1.0",
+      "description": "No pos namás es un juego de chill donde te despedaza un animatronico Pero todo piola",
+      "changelog": "Nada solo beta XD",
+      "apkUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/download/five-night-at-amyr-oh-algo-asi-xd-v1.0/beta0.0.2.apk",
+      "releaseUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/tag/five-night-at-amyr-oh-algo-asi-xd-v1.0",
+      "apkSize": 33955876,
+      "releaseDate": "20/11/2026"
     }
   ]
 }
