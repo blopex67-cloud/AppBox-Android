@@ -184,6 +184,84 @@ class MainActivity : Activity() {
             webView.restoreState(savedInstanceState)
             mainHandler.postDelayed(hideLoading, 900)
         }
+        checkForAppUpdates()
+    }
+
+    private fun checkForAppUpdates() {
+        Thread {
+            try {
+                val connection = (java.net.URL("https://api.github.com/repos/blopex67-cloud/AppBox-Android/releases?per_page=100").openConnection() as java.net.HttpURLConnection).apply {
+                    requestMethod = "GET"
+                    connectTimeout = 10000
+                    readTimeout = 10000
+                    setRequestProperty("Accept", "application/vnd.github+json")
+                    setRequestProperty("User-Agent", "AppBox-Android")
+                }
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+                connection.disconnect()
+                val releases = org.json.JSONArray(response)
+                var bestVersion: String? = null
+                var bestUrl: String? = null
+                for (i in 0 until releases.length()) {
+                    val release = releases.getJSONObject(i)
+                    if (release.optBoolean("draft") || release.optBoolean("prerelease")) continue
+                    val tag = release.optString("tag_name")
+                    if (!tag.startsWith("appbox-v")) continue
+                    val version = tag.removePrefix("appbox-v")
+                    if (!isNewerVersion(version, bestVersion ?: "0.0.0")) continue
+                    val assets = release.optJSONArray("assets") ?: continue
+                    val apk = "AppBox-v$version.apk"
+                    var url: String? = null
+                    for (j in 0 until assets.length()) {
+                        val asset = assets.getJSONObject(j)
+                        if (asset.optString("name") == apk) { url = asset.optString("browser_download_url"); break }
+                    }
+                    if (url != null) { bestVersion = version; bestUrl = url }
+                }
+                val installed = packageManager.getPackageInfo(packageName, 0).versionName ?: "0.0.0"
+                val availableVersion = bestVersion
+                val downloadUrl = bestUrl
+                if (availableVersion != null && downloadUrl != null && isNewerVersion(availableVersion, installed)) {
+                    mainHandler.post { showAppUpdateDialog(availableVersion, downloadUrl) }
+                }
+            } catch (error: Exception) {
+                android.util.Log.w("AppBoxUpdater", "No se pudo revisar actualizaciones", error)
+            }
+        }.start()
+    }
+
+    private fun isNewerVersion(candidate: String, current: String): Boolean {
+        val a = Regex("\\d+").findAll(candidate).mapNotNull { it.value.toLongOrNull() }.toList()
+        val b = Regex("\\d+").findAll(current).mapNotNull { it.value.toLongOrNull() }.toList()
+        for (i in 0 until maxOf(a.size, b.size)) {
+            val left = a.getOrElse(i) { 0L }
+            val right = b.getOrElse(i) { 0L }
+            if (left != right) return left > right
+        }
+        return false
+    }
+
+    private fun showAppUpdateDialog(version: String, url: String) {
+        if (isFinishing || isDestroyed) return
+        android.app.AlertDialog.Builder(this)
+            .setTitle("AppBox $version disponible")
+            .setMessage("Descarga la actualización. Al terminar, Android te pedirá confirmar la instalación.")
+            .setNegativeButton("Ahora no", null)
+            .setPositiveButton("Descargar") { _, _ ->
+                try {
+                    val request = DownloadManager.Request(Uri.parse(url))
+                        .setTitle("Actualización de AppBox")
+                        .setDescription("Descargando AppBox $version")
+                        .setMimeType("application/vnd.android.package-archive")
+                        .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "AppBox-v$version.apk")
+                    lastDownloadId = (getSystemService(DOWNLOAD_SERVICE) as DownloadManager).enqueue(request)
+                    Toast.makeText(this, "Actualización descargándose. Android te pedirá confirmar la instalación.", Toast.LENGTH_LONG).show()
+                } catch (_: Exception) {
+                    Toast.makeText(this, "No se pudo iniciar la descarga de AppBox.", Toast.LENGTH_LONG).show()
+                }
+            }
+            .show()
     }
 
     private fun apkFilename(url: String, disposition: String?): String {
