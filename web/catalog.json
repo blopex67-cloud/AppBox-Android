@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updatedAt": "2026-11-20T03:51:20.063Z",
+  "updatedAt": "2026-11-20T03:51:23.289Z",
   "apps": [
     {
       "id": "volumi3d",
@@ -18,7 +18,8 @@
       "releaseDate": "20/11/2026",
       "iconUrl": "https://github.com/blopex67-cloud/AppBox-Android/releases/download/volumi3d-v1.0.0/app-icon.jpg",
       "screenshots": [
-        "https://github.com/blopex67-cloud/AppBox-Android/releases/download/volumi3d-v1.0.0/screenshot-1.png"
+        "https://github.com/blopex67-cloud/AppBox-Android/releases/download/volumi3d-v1.0.0/screenshot-1.png",
+        "https://github.com/blopex67-cloud/AppBox-Android/releases/download/volumi3d-v1.0.0/screenshot-2.jpg"
       ]
     }
   ]
